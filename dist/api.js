@@ -238,10 +238,12 @@ const dashboard = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 req.session.user.name = [familyName, givenName].filter(Boolean).join(" ");
             }
         }
+        console.log("before save");
         req.session.save((err) => {
   if (err) console.error("Session save error:", err);
   console.log("Session saved successfully.");
 });
+        
         console.log("name:", req.session.user.name);
         yield (0, database_1.dbconnection)();
         const filter = { email: userData.email };
