@@ -286,7 +286,7 @@ const UserName = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             if (UserData.twitterAccessToken !== undefined && UserData.twitterAccessToken !== null)
                 twitterAT = true;
         }
-         res.json({ name: UserData.name, email: UserData.email, googleAT, facebookAT, twitterAT });
+         res.json({ name: UserData?.name, email: UserData.email, googleAT, facebookAT, twitterAT });
     } else
         res.status(401).json({ error: "User not logged in" });
 });
