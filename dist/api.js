@@ -258,7 +258,7 @@ const dashboard = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         yield database_1.mergedModel.findOneAndUpdate(filter, { $set: update }, { upsert: true, new: true });
         console.log("Redirecting to:", process.env.front_end);
 // After successful login
-res.json({ success: true, redirectURL: `https://smarteventmanager.netlify.app/connections?email=${userData.email}&provider=${userData.provider}` });    
+res.redirect("https://smarteventmanager.netlify.app/connections");
     }
     catch (error) {
         console.error("Dashboard error:", error);
@@ -283,7 +283,7 @@ const UserName = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
     }
     if (((_a = req.session.user) === null || _a === void 0 ? void 0 : _a.name) && ((_b = req.session.user) === null || _b === void 0 ? void 0 : _b.email))
-        res.json({ name: req.session.user.name, email: req.session.user.email, googleAT, facebookAT, twitterAT });
+        res.re({ name: req.session.user.name, email: req.session.user.email, googleAT, facebookAT, twitterAT });
     else
         res.status(401).json({ error: "User not logged in" });
 });
