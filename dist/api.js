@@ -78,7 +78,7 @@ const googleSaveSession = (req, res) => __awaiter(void 0, void 0, void 0, functi
         googleRefreshToken: user.googleRefreshToken,
         provider: "google",
     });
-    res.redirect(`/dashboard?token=${token}`);
+    res.redirect(`https://backend-sem.onrender.com/dashboard?token=${token}`);
 });
 exports.googleSaveSession = googleSaveSession;
 const facebookhandler = (req, res, next) => {
