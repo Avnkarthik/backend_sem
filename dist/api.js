@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Subscribe = exports.EmailEvents = exports.DeleteAccount = exports.SortedEvents = exports.twitEvents = exports.fbEvents = exports.logout = exports.UserName = exports.dashboard = exports.callbackTwitter = exports.twitterauth = exports.renotify = exports.fbSaveSession = exports.facebookhandler = exports.googleSaveSession = exports.userlogin = exports.updatetask = exports.inserttasks = exports.gettask = void 0;
+exports.getSession = exports.Subscribe = exports.EmailEvents = exports.DeleteAccount = exports.SortedEvents = exports.twitEvents = exports.fbEvents = exports.logout = exports.UserName = exports.dashboard = exports.callbackTwitter = exports.twitterauth = exports.renotify = exports.fbSaveSession = exports.facebookhandler = exports.googleSaveSession = exports.userlogin = exports.updatetask = exports.inserttasks = exports.gettask = void 0;
 const express_validator_1 = require("express-validator");
 const database_1 = require("./database");
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -78,7 +78,7 @@ const googleSaveSession = (req, res) => __awaiter(void 0, void 0, void 0, functi
         googleRefreshToken: user.googleRefreshToken,
         provider: "google",
     });
-    res.redirect(`https://backend-sem.onrender.com/dashboard?token=${token}`);
+    res.redirect(`/dashboard?token=${token}`);
 });
 exports.googleSaveSession = googleSaveSession;
 const facebookhandler = (req, res, next) => {
@@ -238,12 +238,7 @@ const dashboard = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 req.session.user.name = [familyName, givenName].filter(Boolean).join(" ");
             }
         }
-        console.log("before save");
-        req.session.save((err) => {
-  if (err) console.error("Session save error:", err);
-  console.log("Session saved successfully.");
-            console.log("name:", req.session.user.name);
-}); 
+        console.log("name:", req.session.user.name);
         yield (0, database_1.dbconnection)();
         const filter = { email: userData.email };
         const update = Object.assign(Object.assign(Object.assign({ name: userData.familyName + userData.givenName, email: userData.email }, (userData.googleAccessToken && {
@@ -258,11 +253,22 @@ const dashboard = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }));
         yield database_1.mergedModel.findOneAndUpdate(filter, { $set: update }, { upsert: true, new: true });
         console.log("Redirecting to:", process.env.front_end);
-// After successful login
-  res.redirect("https://smarteventmanager.netlify.app/connections?email=${userData.email}&provider=${userData.provider}");
-
-
-     
+        res.send(`
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <title>Redirecting...</title>
+      <script>
+        setTimeout(function() {
+          window.location.href = "${process.env.front_end}/connections?token=${encodeURIComponent(token)}";
+        }, 500);
+      </script>
+    </head>
+    <body>
+      <p>Session saved. Redirecting...</p>
+    </body>
+  </html>
+`);
     }
     catch (error) {
         console.error("Dashboard error:", error);
@@ -273,10 +279,9 @@ exports.dashboard = dashboard;
 const UserName = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     let googleAT = false, facebookAT = false, twitterAT = false;
-    const email = req.query.email;
-    if (email) {
+    if (req.session.user) {
         yield (0, database_1.dbconnection)();
-        
+        const email = req.session.user.email;
         const UserData = yield database_1.mergedModel.findOne({ email: email });
         if (UserData) {
             if (UserData.googleAccessToken !== undefined && UserData.googleAccessToken !== null)
@@ -286,8 +291,10 @@ const UserName = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             if (UserData.twitterAccessToken !== undefined && UserData.twitterAccessToken !== null)
                 twitterAT = true;
         }
-         res.json({ name: UserData?.name, email: UserData.email, googleAT, facebookAT, twitterAT });
-    } else
+    }
+    if (((_a = req.session.user) === null || _a === void 0 ? void 0 : _a.name) && ((_b = req.session.user) === null || _b === void 0 ? void 0 : _b.email))
+        res.json({ name: req.session.user.name, email: req.session.user.email, googleAT, facebookAT, twitterAT });
+    else
         res.status(401).json({ error: "User not logged in" });
 });
 exports.UserName = UserName;
@@ -572,4 +579,45 @@ const Subscribe = (req, res) => {
     res.status(201).json({ message: 'Notification scheduled' });
 };
 exports.Subscribe = Subscribe;
+const getSession = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const token = req.query.token;
+    const userData = (0, middleware_1.verifyToken)(token);
+    if (!(userData === null || userData === void 0 ? void 0 : userData.email) || !(userData === null || userData === void 0 ? void 0 : userData.provider)) {
+        res.status(401).json({ mssg: "Invalid token" });
+        return;
+    }
+    if (userData.name) {
+        console.log("family name:", userData.name.familyName);
+        console.log("givenName:", userData.name.givenName);
+    }
+    if (!req.session.user)
+        req.session.user = {};
+    if (!((_a = req.session.user) === null || _a === void 0 ? void 0 : _a.email) && userData.email)
+        req.session.user.email = userData.email;
+    if (!req.session.user.name && userData.name) {
+        const { familyName, givenName } = userData.name;
+        if (familyName || givenName) {
+            req.session.user.name = [familyName, givenName].filter(Boolean).join(" ");
+        }
+    }
+    console.log("name:", req.session.user.name);
+    yield (0, database_1.dbconnection)();
+    const filter = { email: userData.email };
+    const update = Object.assign(Object.assign(Object.assign({ name: userData.familyName + userData.givenName, email: userData.email }, (userData.googleAccessToken && {
+        googleAccessToken: userData.googleAccessToken,
+        googleRefreshToken: userData.googleRefreshToken,
+    })), (userData.facebookAccessToken && {
+        facebookAccessToken: userData.facebookAccessToken,
+        facebookRefreshToken: userData.facebookRefreshToken,
+    })), (userData.twitterAccessToken && {
+        twitterAccessToken: userData.twitterAccessToken,
+        twitterRefreshToken: userData.twitterRefreshToken,
+    }));
+    yield database_1.mergedModel.findOneAndUpdate(filter, { $set: update }, { upsert: true, new: true });
+    req.session.save(() => {
+        res.json({ success: true, user: req.session.user });
+    });
+});
+exports.getSession = getSession;
 //# sourceMappingURL=api.js.map

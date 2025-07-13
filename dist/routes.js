@@ -29,4 +29,5 @@ exports.controll.get("/sortedEvents", api_1.SortedEvents);
 exports.controll.post("/deleteAccount", api_1.DeleteAccount);
 exports.controll.get("/emailEvents", api_1.EmailEvents);
 exports.controll.post("/subscribe", api_1.Subscribe);
+exports.controll.get("/getSession", api_1.getSession);
 //# sourceMappingURL=routes.js.map
