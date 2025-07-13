@@ -26,7 +26,7 @@ console.log(process.env.GOOGLE_CLIENT_ID);
 const strategy = new passport_google_oauth20_1.Strategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "https://backend-sem.onrender.com/auth/google",
+    callbackURL: "http://localhost:8020/auth/google",
     scope: ['https://www.googleapis.com/auth/calendar',
         'https://www.googleapis.com/auth/calendar.readonly',
         'https://www.googleapis.com/auth/gmail.readonly'
@@ -52,7 +52,7 @@ passport_1.default.use(strategy);
 passport_1.default.use(new passport_facebook_1.Strategy({
     clientID: process.env.FACEBOOK_CLIENT_ID,
     clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-    callbackURL: "https://backend-sem.onrender.com/auth/facebook/callback",
+    callbackURL: "http://localhost:8020/auth/facebook/callback",
     profileFields: ["id", "name"],
 }, (accessToken, refreshToken, profile, done) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
@@ -70,7 +70,7 @@ passport_1.default.use(new passport_oauth2_1.Strategy({
     tokenURL: 'https://api.twitter.com/2/oauth2/token',
     clientID: process.env.TWITTER_CLIENT_ID,
     clientSecret: process.env.TWITTER_CLIENT_SECRET,
-    callbackURL: "https://backend-sem.onrender.com/auth/twitter",
+    callbackURL: "http://localhost:8020/auth/twitter",
     scope: ['tweet.read', 'users.read', 'offline.access'],
     state: true
 }, (accessToken, refreshToken, profile, done) => __awaiter(void 0, void 0, void 0, function* () {

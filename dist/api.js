@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getSession = exports.Subscribe = exports.EmailEvents = exports.DeleteAccount = exports.SortedEvents = exports.twitEvents = exports.fbEvents = exports.logout = exports.UserName = exports.dashboard = exports.callbackTwitter = exports.twitterauth = exports.renotify = exports.fbSaveSession = exports.facebookhandler = exports.googleSaveSession = exports.userlogin = exports.updatetask = exports.inserttasks = exports.gettask = void 0;
+exports.tempcookie = exports.getSession = exports.Subscribe = exports.EmailEvents = exports.DeleteAccount = exports.SortedEvents = exports.twitEvents = exports.fbEvents = exports.logout = exports.UserName = exports.dashboard = exports.callbackTwitter = exports.twitterauth = exports.renotify = exports.fbSaveSession = exports.facebookhandler = exports.googleSaveSession = exports.userlogin = exports.updatetask = exports.inserttasks = exports.gettask = void 0;
 const express_validator_1 = require("express-validator");
 const database_1 = require("./database");
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -582,7 +582,6 @@ exports.Subscribe = Subscribe;
 const getSession = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const token = req.query.token;
-    console.log("token:",token);
     const userData = (0, middleware_1.verifyToken)(token);
     if (!(userData === null || userData === void 0 ? void 0 : userData.email) || !(userData === null || userData === void 0 ? void 0 : userData.provider)) {
         res.status(401).json({ mssg: "Invalid token" });
@@ -621,4 +620,13 @@ const getSession = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     });
 });
 exports.getSession = getSession;
+const tempcookie = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.cookie("debugCookie", "test123", {
+        secure: true,
+        sameSite: "none",
+        httpOnly: true,
+    });
+    res.send("Sent cookie");
+});
+exports.tempcookie = tempcookie;
 //# sourceMappingURL=api.js.map
