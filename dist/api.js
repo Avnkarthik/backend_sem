@@ -616,11 +616,6 @@ const getSession = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }));
     yield database_1.mergedModel.findOneAndUpdate(filter, { $set: update }, { upsert: true, new: true });
     req.session.save(() => {
-        res.cookie("connect.sid", req.session.user, {
-  httpOnly: true,
-  secure: true,
-  sameSite: "none",
-});
         res.json({ success: true, user: req.session.user });
     });
 });
