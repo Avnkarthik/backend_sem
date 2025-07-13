@@ -273,9 +273,10 @@ exports.dashboard = dashboard;
 const UserName = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     let googleAT = false, facebookAT = false, twitterAT = false;
-    if (req.session.user) {
+    const email = req.query.email;
+    if (email) {
         yield (0, database_1.dbconnection)();
-        const email = req.query.email;
+        
         const UserData = yield database_1.mergedModel.findOne({ email: email });
         if (UserData) {
             if (UserData.googleAccessToken !== undefined && UserData.googleAccessToken !== null)
@@ -286,7 +287,7 @@ const UserName = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 twitterAT = true;
         }
     }
-    if (((_a = req.session.user) === null || _a === void 0 ? void 0 : _a.name) && ((_b = req.session.user) === null || _b === void 0 ? void 0 : _b.email))
+       if(email)
         res.re({ name: UserData.name, email: UserData.email, googleAT, facebookAT, twitterAT });
     else
         res.status(401).json({ error: "User not logged in" });
