@@ -582,6 +582,7 @@ exports.Subscribe = Subscribe;
 const getSession = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const token = req.query.token;
+    console.log("token:",token);
     const userData = (0, middleware_1.verifyToken)(token);
     if (!(userData === null || userData === void 0 ? void 0 : userData.email) || !(userData === null || userData === void 0 ? void 0 : userData.provider)) {
         res.status(401).json({ mssg: "Invalid token" });
