@@ -239,7 +239,7 @@ const dashboard = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             }
         }
         console.log("before save");
-        req.session.save((err) => {
+      await  req.session.save((err) => {
   if (err) console.error("Session save error:", err);
   console.log("Session saved successfully.");
 });
