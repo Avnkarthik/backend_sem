@@ -259,7 +259,7 @@ const dashboard = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         yield database_1.mergedModel.findOneAndUpdate(filter, { $set: update }, { upsert: true, new: true });
         console.log("Redirecting to:", process.env.front_end);
 // After successful login
-  res.redirect("https://smarteventmanager.netlify.app/connections");
+  res.redirect("https://smarteventmanager.netlify.app/connections?email=${userData.email}&provider=${userData.provider}");
 
 
      
