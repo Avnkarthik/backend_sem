@@ -259,24 +259,34 @@ const dashboard = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         yield database_1.mergedModel.findOneAndUpdate(filter, { $set: update }, { upsert: true, new: true });
         console.log("Redirecting to:", process.env.front_end);
 // After successful login
+const name = req.session.user?.name || "";
+const email = req.session.user?.email || "";
+const provider = req.session.user?.provider || "";
+
 res.send(`
-  <!DOCTYPE html>
   <html>
     <head>
       <title>Redirecting...</title>
       <script>
-        // Delay to allow session cookie to be stored
-        setTimeout(function() {
-          window.location.href = "https://smarteventmanager.netlify.app/connections?email=${userData.email}&provider=${userData.provider}";
+        // Pass user data to frontend via localStorage
+        const userSession = {
+          name: "${name}",
+          email: "${email}",
+          provider: "${provider}"
+        };
+        localStorage.setItem("userSession", JSON.stringify(userSession));
+
+        // Redirect to frontend
+        setTimeout(() => {
+          window.location.href = "https://smarteventmanager.netlify.app/connections";
         }, 500);
       </script>
     </head>
     <body>
-      <p>Logging you in... Redirecting shortly.</p>
+      <p>Logging you in... please wait.</p>
     </body>
   </html>
 `);
-
     }
     catch (error) {
         console.error("Dashboard error:", error);
