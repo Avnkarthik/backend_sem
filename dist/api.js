@@ -242,7 +242,8 @@ const dashboard = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         req.session.save((err) => {
   if (err) console.error("Session save error:", err);
   console.log("Session saved successfully.");
-}).then(()=> console.log("name:", req.session.user.name));
+            console.log("name:", req.session.user.name);
+}); 
         yield (0, database_1.dbconnection)();
         const filter = { email: userData.email };
         const update = Object.assign(Object.assign(Object.assign({ name: userData.familyName + userData.givenName, email: userData.email }, (userData.googleAccessToken && {
@@ -258,7 +259,7 @@ const dashboard = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         yield database_1.mergedModel.findOneAndUpdate(filter, { $set: update }, { upsert: true, new: true });
         console.log("Redirecting to:", process.env.front_end);
 // After successful login
-res.redirect("https://smarteventmanager.netlify.app/connections");
+res.json({status:"sucess",redirect:true});
     }
     catch (error) {
         console.error("Dashboard error:", error);
