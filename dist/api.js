@@ -239,12 +239,10 @@ const dashboard = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             }
         }
         console.log("before save");
-      await  req.session.save((err) => {
+        req.session.save((err) => {
   if (err) console.error("Session save error:", err);
   console.log("Session saved successfully.");
-});
-        
-        console.log("name:", req.session.user.name);
+}).then(()=> console.log("name:", req.session.user.name));
         yield (0, database_1.dbconnection)();
         const filter = { email: userData.email };
         const update = Object.assign(Object.assign(Object.assign({ name: userData.familyName + userData.givenName, email: userData.email }, (userData.googleAccessToken && {
