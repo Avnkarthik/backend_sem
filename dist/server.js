@@ -41,7 +41,7 @@ app.use((0, express_session_1.default)({
         maxAge: 1000 * 60 * 60 * 24,
         httpOnly: true,
         secure:true,
-        sameSite: "none"
+        sameSite: "none",
     }
 }));
 app.use(passport_1.default.initialize());
