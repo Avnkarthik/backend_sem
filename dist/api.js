@@ -253,7 +253,7 @@ const dashboard = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }));
         yield database_1.mergedModel.findOneAndUpdate(filter, { $set: update }, { upsert: true, new: true });
         console.log("Redirecting to:", process.env.front_end);
-        res.redirect("http://localhost:5173/connections");
+        res.redirect("http://smarteventmanager.netlify.app/connections");
     }
     catch (error) {
         console.error("Dashboard error:", error);
