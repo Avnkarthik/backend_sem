@@ -14,7 +14,7 @@ exports.controll.post("/insert", middleware_1.taskval, api_1.inserttasks);
 exports.controll.put("/update:id", api_1.updatetask);
 exports.controll.post("/userlogin", api_1.userlogin);
 exports.controll.get("/google", OAuth_1.default.authenticate('google', { scope: ['email', 'profile', 'https://www.googleapis.com/auth/calendar', 'https://www.googleapis.com/auth/gmail.readonly'], prompt: 'consent', accessType: 'offline' }));
-exports.controll.get("/auth/google", OAuth_1.default.authenticate('google', { failureRedirect: "/dashboard?failure" }), api_1.googleSaveSession);
+exports.controll.get("/auth/google/callback", OAuth_1.default.authenticate('google', { failureRedirect: "/dashboard?failure" }), api_1.googleSaveSession);
 exports.controll.get("/twitter", api_1.twitterauth);
 exports.controll.get("/auth/twitter", api_1.callbackTwitter);
 exports.controll.get("/facebook", middleware_1.stateMiddleware, api_1.facebookhandler);
