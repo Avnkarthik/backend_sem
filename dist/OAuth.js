@@ -26,7 +26,7 @@ console.log(process.env.GOOGLE_CLIENT_ID);
 const strategy = new passport_google_oauth20_1.Strategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: " https://backend-sem.onrender.com/auth/google",
+    callbackURL: " https://backend-sem.onrender.com/auth/google/callback",
     scope: ['https://www.googleapis.com/auth/calendar',
         'https://www.googleapis.com/auth/calendar.readonly',
         'https://www.googleapis.com/auth/gmail.readonly'
