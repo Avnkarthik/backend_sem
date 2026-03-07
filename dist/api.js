@@ -260,7 +260,7 @@ const dashboard = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
       <title>Redirecting...</title>
       <script>
         setTimeout(function() {
-          window.location.href = "${process.env.front_end}/connections?token=${encodeURIComponent(token)}";
+          window.location.href = "http://localhost:5173/connections?token=${encodeURIComponent(token)}";
         }, 500);
       </script>
     </head>
@@ -268,6 +268,7 @@ const dashboard = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
       <p>Session saved. Redirecting...</p>
     </body>
   </html>
+
 `);
     }
     catch (error) {
